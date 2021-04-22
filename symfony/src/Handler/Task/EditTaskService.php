@@ -21,7 +21,7 @@ class EditTaskService
         $this->em = $em;
     }
 
-    public function __invoke(Task $task, EditTaskRequest $request)
+    public function __invoke(Task $task, EditTaskRequest $request): void
     {
         if ($parent = $request->getParent()) {
             $parent = $this->repository->find($parent);

@@ -21,7 +21,7 @@ class CreateTaskService
         $this->em = $em;
     }
 
-    public function __invoke(CreateTaskRequest $request)
+    public function __invoke(CreateTaskRequest $request): void
     {
         if ($parent = $request->getParent()) {
             $parent = $this->repository->find($parent);

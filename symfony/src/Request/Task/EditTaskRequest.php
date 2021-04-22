@@ -11,29 +11,31 @@ class EditTaskRequest extends RequestObject
     public function rules()
     {
         return new Assert\Collection([
-            'title' => [
-                new Assert\Optional([
-                    new Assert\NotBlank(),
-                    new Assert\Type(['type' => 'string']),
-                    new Assert\Length(['max' => 255]),
-                ]),
+            'fields' => [
+                'title' => [
+                    new Assert\Optional([
+                        new Assert\NotBlank(),
+                        new Assert\Type(['type' => 'string']),
+                        new Assert\Length(['max' => 255]),
+                    ]),
+                ],
+                'description' => [
+                    new Assert\Optional([
+                        new Assert\Type(['type' => 'string']),
+                    ]),
+                ],
+                'parent' => [
+                    new Assert\Optional([
+                        new Assert\Type(['type' => 'int']),
+                    ]),
+                ],
+                'status' => [
+                    new Assert\Optional([
+                        new Assert\Type(['type' => 'string']),
+                        new Assert\Choice(TaskStatus::getValues())
+                    ])
+                ],
             ],
-            'description' => [
-                new Assert\Optional([
-                    new Assert\Type(['type' => 'string']),
-                ]),
-            ],
-            'parent' => [
-                new Assert\Optional([
-                    new Assert\Type(['type' => 'int']),
-                ]),
-            ],
-            'status' => [
-                new Assert\Optional([
-                    new Assert\Type(['type' => 'string']),
-                    new Assert\Choice(TaskStatus::getValues())
-                ])
-            ]
         ]);
     }
 
