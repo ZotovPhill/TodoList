@@ -1,0 +1,47 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:12.3-alpine
+    ports:
+      - '5432:5432'
+    working_dir: /app
+    restart: always
+    env_file:
+      ./.env.db
+    volumes:
+      - ./shared-files/database/dump:/app/dump
+      - ./shared-files/database/postgresql/:/var/lib/postgresql/
+
+  php:
+    build: ./system/03-phpfpm/
+    ports:
+      - "9000:9001"
+    volumes:
+      - ./symfony:/var/www/symfony
+      - ./shared-files/logs/symfony:/var/www/symfony/var/log:cached
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  nginx:
+    build: ./system/02-nginx/
+    ports:
+      - "80:80"
+    depends_on:
+      - php
+    volumes:
+      - ./symfony:/var/www/symfony:cached
+      - ./shared-files/logs/nginx:/var/log/nginx:cached
+
+#  php_queue_consumer:
+#    build: ./system/03-phpfpm/
+#    container_name: php_queue_consumer
+#    depends_on:
+#      - db
+#    entrypoint: ["/bin/bash", "./bin/consumer-boot.sh"]
+#    restart: unless-stopped
+#    volumes:
+#      - ./symfony:/var/www/symfony
+#      - ./shared-files/consumer/var:/var/www/symfony/var

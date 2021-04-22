@@ -1,0 +1,4 @@
+.idea/
+shared-files/consumer
+shared-files/database/postgresql
+shared-files/logs/nginx
